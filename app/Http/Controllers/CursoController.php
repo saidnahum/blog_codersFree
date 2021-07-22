@@ -2,22 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curso;
 use Illuminate\Http\Request;
 
 class CursoController extends Controller
 {
     public function index(){
-      return view('cursos.index');
+      $cursos = Curso::orderBy('id', 'desc')->paginate();
+
+      return view('cursos.index', compact('cursos'));
     }
 
     public function create(){
       return view('cursos.create');
     }
 
-    public function show($curso){
+    public function store(Request $request){
+
+      $request->validate([
+        'name' => 'required',
+        'descripcion' => 'required',
+        'categoria' => 'required'
+      ]);
+
+      $curso = new Curso();
+
+      $curso->name = $request->name;
+      $curso->descripcion = $request->descripcion;
+      $curso->categoria = $request->categoria;
+
+      $curso->save();
+
+      return redirect()->route('cursos.show', $curso->id);
+    }
+
+    public function show(Curso $curso){
       // Se utiliza compact si la variable y lo que se envía
       //  tiene el mismo nombre
       //return view('cursos.show', compact('curso'));
-      return view('cursos.show', ['curso' => $curso]);
+
+      return view('cursos.show', compact('curso'));
+    }
+
+    public function edit(Curso $curso){
+      return view('cursos.edit', compact('curso'));
+    }
+
+    public function update(Request $request, Curso $curso){
+      $request->validate([
+        'name' => 'required',
+        'descripcion' => 'required',
+        'categoria' => 'required'
+      ]);
+      
+      $curso->name = $request->name;
+      $curso->descripcion = $request->descripcion;
+      $curso->categoria = $request->categoria;
+      
+      $curso->save();
+      return redirect()->route('cursos.show', $curso->id);
     }
 }

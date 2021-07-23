@@ -28,10 +28,9 @@ class CursoController extends Controller
 
       // $curso->save();
 
-      return $request->all();
+      //return $request->all();
 
-      $curso = Curso::created($request->all());
-
+      $curso = Curso::create($request->all());
       return redirect()->route('cursos.show', $curso);
     }
 
@@ -54,11 +53,19 @@ class CursoController extends Controller
         'categoria' => 'required'
       ]);
       
-      $curso->name = $request->name;
-      $curso->descripcion = $request->descripcion;
-      $curso->categoria = $request->categoria;
+      // $curso->name = $request->name;
+      // $curso->descripcion = $request->descripcion;
+      // $curso->categoria = $request->categoria;
       
-      $curso->save();
+      // $curso->save();
+
+      $curso->update($request->all());
       return redirect()->route('cursos.show', $curso->id);
+    }
+
+    public function destroy(Curso $curso)
+    {
+      $curso->delete();
+      return redirect()->route('cursos.index');
     }
 }

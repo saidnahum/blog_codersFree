@@ -60,7 +60,7 @@ class CursoController extends Controller
       // $curso->save();
 
       $curso->update($request->all());
-      return redirect()->route('cursos.show', $curso->id);
+      return redirect()->route('cursos.show', $curso);
     }
 
     public function destroy(Curso $curso)
